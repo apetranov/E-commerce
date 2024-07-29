@@ -15,54 +15,50 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 
 
-// Firestore update functions
 const updateLikeStatus = async (productId: string, liked: boolean) => {
-  try {
-    const productRef = doc(firestore, 'product', productId);
-    await updateDoc(productRef, { Liked: liked });
-  } catch (error) {
-    console.error('Error updating like status:', error);
-  }
-};
+    try {
+      const productRef = doc(firestore, 'product', productId);
+      await updateDoc(productRef, { Liked: liked });
+    } catch (error) {
+      console.error('Error updating like status:', error);
+    }
+  };
+  
+  const updateShoppingCartStatus = async (productId: string, inCart: boolean) => {
+    try {
+      const productRef = doc(firestore, 'product', productId);
+      await updateDoc(productRef, { InShoppingCart: inCart });
+    } catch (error) {
+      console.error('Error updating shopping cart status:', error);
+    }
+  };
 
-const updateShoppingCartStatus = async (productId: string, inCart: boolean) => {
-  try {
-    const productRef = doc(firestore, 'product', productId);
-    await updateDoc(productRef, { InShoppingCart: inCart });
-  } catch (error) {
-    console.error('Error updating shopping cart status:', error);
-  }
-};
+function Likes() {
+    const handleLikeClick = async (productId: string, currentLikedStatus: boolean) => {
+        await updateLikeStatus(productId, !currentLikedStatus);
+        toast.success(currentLikedStatus ? 'Product unliked!' : 'Product lliked!');
+      };
+      
+      const handleCartClick = async (productId: string, currentCartStatus: boolean) => {
+        await updateShoppingCartStatus(productId, !currentCartStatus);
+        toast.success(currentCartStatus ? 'Product removed from shopping cart!' : 'Product added to shopping cart!')
+      };
 
-export default function Home() {
-  const [products, productsLoading, productsError] = useCollection(
-    collection(firestore, "product")
-);
+    const [products, productsLoading, productsError] = useCollection(
+        collection(firestore, "product")
+    );
 
-if (!productsLoading && products) {
-  products.docs.map((doc) => console.log(doc.data()));
-}
-
-const handleLikeClick = async (productId: string, currentLikedStatus: boolean) => {
-  await updateLikeStatus(productId, !currentLikedStatus);
-  toast.success(currentLikedStatus ? 'Product unliked!' : 'Product lliked!');
-};
-
-const handleCartClick = async (productId: string, currentCartStatus: boolean) => {
-  await updateShoppingCartStatus(productId, !currentCartStatus);
-  toast.success(currentCartStatus ? 'Product removed from shopping cart!' : 'Product added to shopping cart!')
-};
-
-
-
+    const filteredProducts = products?.docs.filter(doc => doc.data().Liked) || [];
   return (
-
-   
-      <div>
+    <div>
         <ToastContainer />
-         < Header/>
-          <div className="p-20 flex space-y-10 md:space-y-0 flex-col md:flex-row md:space-x-20">
-            {products?.docs.map((doc) => {
+        <Header />
+        <div className="flex mt-10 w-2/4 md:w-1/4 mx-auto rounded-3xl p-5 bg-red-600 text-white justify-center items-center">
+            <h1>Liked Products</h1>
+        </div>
+        
+        <div className="p-20 flex space-y-10 md:space-y-0 flex-col md:flex-row md:space-x-20">
+            {filteredProducts?.map((doc) => {
               const productData = doc.data();
               return (
                 <div key={doc.id} className="flex space-y-5 h-2/4 p-5 outline-1 outline flex-col justify-center items-center">
@@ -99,7 +95,8 @@ const handleCartClick = async (productId: string, currentCartStatus: boolean) =>
             
             })}
           </div>
-      </div>
-      
-  );
+    </div>
+  )
 }
+
+export default Likes

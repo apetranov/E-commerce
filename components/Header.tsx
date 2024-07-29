@@ -10,7 +10,10 @@ import {
 function Header() {
   return (
     <div className="flex bg-indigo-600 px-5 flex-row justify-between items-center">
+        <Link href='/'>
             <h1 className="text-bold p-5 rounded-lg text-white">E-COMMERCE</h1>
+        </Link>
+            
             <SignedOut>
                 <Button className='text-indigo-600 bg-white hover:text-white'>
                     <Link href="/dashboard">Log in</Link>
@@ -18,10 +21,16 @@ function Header() {
             </SignedOut>
             <SignedIn>
                 <div className='flex flex-row space-x-7'>
-                <Heart className='text-white'/>
-                <ShoppingCart className='text-white' />
+                <Link href='/dashboard/favourites'>
+                    <Heart className='text-white'/>
+                </Link>
                 
-                </div>  
+                <Link href="/dashboard/cart">
+                    <ShoppingCart className='text-white' />
+                </Link>
+                
+                
+                </div>
                 
             </SignedIn>
     </div>

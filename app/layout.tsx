@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   ClerkProvider,
   SignInButton,
@@ -23,7 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
+      
       <html lang="en">
+        
         <body className={inter.className}>{children}</body>
       </html>
     </ClerkProvider>
