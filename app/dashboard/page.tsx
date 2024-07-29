@@ -10,7 +10,7 @@ import StarRating from '@/components/StarRating';
 import { SignedIn } from "@clerk/nextjs";
 import { Heart, ShoppingCart } from 'lucide-react'
 import { Button } from "@/components/ui/button";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const updateLikeStatus = async (productId: string, liked: boolean) => {
     try {
@@ -56,6 +56,7 @@ const handleLikeClick = async (productId: string, currentLikedStatus: boolean) =
 
    
       <div>
+        <ToastContainer />
          < Header/>
          <div className="p-20 flex space-y-10 md:space-y-0 flex-col md:flex-row md:space-x-20">
             {products?.docs.map((doc) => {
